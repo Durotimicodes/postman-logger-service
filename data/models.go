@@ -14,7 +14,6 @@ import (
 
 var client *mongo.Client
 
-
 type Models struct {
 	LogEntry LogEntry
 }
@@ -27,7 +26,6 @@ type LogEntry struct {
 	UpdatedAt time.Time `bson:"updated_at" json:updated_at"`
 }
 
-
 func New(mongo *mongo.Client) Models {
 	client = mongo
 
@@ -35,8 +33,6 @@ func New(mongo *mongo.Client) Models {
 		LogEntry: LogEntry{},
 	}
 }
-
-
 
 func (l *LogEntry) Insert(entry LogEntry) error {
 	collection := client.Database("logs").Collection("logs")
@@ -54,7 +50,6 @@ func (l *LogEntry) Insert(entry LogEntry) error {
 
 	return nil
 }
-
 
 func (l *LogEntry) All() ([]*LogEntry, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
@@ -139,9 +134,9 @@ func (l *LogEntry) Update() (*mongo.UpdateResult, error) {
 		bson.M{"_id": docID},
 		bson.D{
 			{"$set", bson.D{
-				{"name": l.Name},
-				{"data": l.Data},
-				{"updated_at": time.Now()},
+				{"name", l.Name},
+				{"data", l.Data},
+				{"updated_at", time.Now()},
 			}},
 		},
 	)
